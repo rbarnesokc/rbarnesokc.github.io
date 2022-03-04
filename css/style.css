@@ -7,7 +7,7 @@
 /* main background image */
 .bgimage {
     height:100vh;
-    background: linear-gradient(-70deg, rgba(0, 0, 0, .6) 30%, rgba(0, 0, 0, 0) 30%), url('images/DetailsPrep-0072.jpg') #426592;
+    background: linear-gradient(-70deg, rgba(0, 0, 0, .6) 30%, rgba(0, 0, 0, 0) 30%), url('IMG_0200.jpg') #426592;
     background-blend-mode: soft-light;
     background-size:cover;
     position:relative;
