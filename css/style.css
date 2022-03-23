@@ -39,8 +39,10 @@ h1 {
     padding-top: 20px;
 }
 
-#contact {
-    padding: 20px;
+#languages {
+    margin: 20px;
+    background-color: #E7ECEF;
+    border-radius: 30px;
 }
 
 /* about section image css */
@@ -101,3 +103,12 @@ h1 {
     text-align: center;
 }
 
+.logo {
+    align-items: center;
+    padding: 10px;  
+}
+
+h5 {
+    text-align: center;
+    color: red;
+}
