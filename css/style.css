@@ -102,8 +102,9 @@ h1 {
     background-color: #A4A9AD;
     /* text-align: center; */
 }
-.footlogo {
-    width: 60px;
+.foot {
+    width: 40px;
+    left: 10%;
 }
 
 .logo {
