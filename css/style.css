@@ -6,11 +6,11 @@
 
 /* main background image */
 .bgimage {
-    height:100vh;
+    height: 100vh;
     background: linear-gradient(-70deg, rgba(0, 0, 0, .6) 30%, rgba(0, 0, 0, 0) 30%), url('../images/DetailsPrep-0072.jpg') #426592;
     background-blend-mode: soft-light;
-    background-size:cover;
-    position:relative;
+    background-size: cover;
+    position: relative;
 }
 
 
@@ -18,9 +18,11 @@
 .head_title {
     font-size: 3rem;
 }
+
 .head_desc {
     font-size: 1.5rem;
 }
+
 .head-text {
     text-align: center;
     position: absolute;
@@ -31,9 +33,12 @@
 }
 
 /* spacing on all sections */
-#services, #portfolio, #contact {
+#services,
+#portfolio,
+#contact {
     padding-top: 20px;
 }
+
 #contact {
     padding-bottom: 20px;
 }
@@ -56,18 +61,22 @@ h1 {
 /* services section css */
 .card {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-} 
+}
+
 .servicesIcon {
     font-size: 36px;
     text-align: center;
     width: 100%;
 }
+
 .card-title {
     text-align: center;
 }
+
 .card:hover .servicesIcon {
     color: #008000;
 }
+
 .servicesText:hover {
     border: 1px solid #008000;
     cursor: default;
@@ -80,11 +89,14 @@ h1 {
 }
 
 .deslink:hover {
-   color: #008000; 
-   font-weight: bold;
+    color: #008000;
+    font-weight: bold;
 }
+
+
 .card-img-top {
-    height: 55%;
+    height: 50%;
+    /* width: 50%; */
 }
 
 
@@ -92,13 +104,14 @@ h1 {
 #footer {
     background-color: #A4A9AD;
 }
+
 .foot {
     width: 40px;
 }
 
 .logo {
     align-items: center;
-    padding: 10px;  
+    padding: 10px;
     width: 70px;
 }
 
