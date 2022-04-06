@@ -19,5 +19,3 @@ navLinks.forEach((l) => {
 })
 
 
-
-
