@@ -93,6 +93,16 @@ h1 {
     font-weight: bold;
 }
 
+.pio {
+    text-decoration: none;
+    color: #ffffffea;
+    transition: color .8s;
+}
+
+.pio:hover {
+    color: #426592;
+    font-weight: bold;
+}
 
 .card-img-top {
     height: 50%;
