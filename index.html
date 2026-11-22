@@ -1,348 +1,939 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <title>My Portfolio</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/b063ea7bea.js" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ryan Barnes</title>
+<meta name="description" content="Ryan Barnes is a software engineer in Oklahoma City building fintech with Elixir and Phoenix LiveView, after 13 years running truck fleets.">
+<link rel="canonical" href="https://www.ryanbarnes.dev/">
+<meta name="theme-color" content="#F2B523">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.ryanbarnes.dev/">
+<meta property="og:title" content="Ryan Barnes">
+<meta property="og:description" content="Software engineer in Oklahoma City. Fintech these days, 13 years of trucking before that.">
+<meta property="og:image" content="https://www.ryanbarnes.dev/images/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ryan Barnes smiling, outdoors in a park">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Fonts are self-hosted (SIL Open Font License, see fonts/README.md). The faces used above the fold are
+     preloaded so they usually arrive before first paint; otherwise the opening heading reflows when they swap in. -->
+<link rel="preload" href="fonts/londrina-solid-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/barlow-semi-condensed-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/barlow-semi-condensed-400.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family: "Londrina Solid"; font-style: normal; font-weight: 300; font-display: swap; src: url(fonts/londrina-solid-300.woff2) format("woff2"); }
+@font-face { font-family: "Londrina Solid"; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/londrina-solid-400.woff2) format("woff2"); }
+@font-face { font-family: "Londrina Solid"; font-style: normal; font-weight: 900; font-display: swap; src: url(fonts/londrina-solid-900.woff2) format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/barlow-semi-condensed-400.woff2) format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/barlow-semi-condensed-500.woff2) format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 600; font-display: swap; src: url(fonts/barlow-semi-condensed-600.woff2) format("woff2"); }
+
+/* Layout: one long scroll of full-width color bands (Oklahoma wheat, flag sky, red dirt, coal, prairie), each blending in from the band above; content sits left-aligned in a 1120px column. Every section heading is made a different way: sketched, typed, poured, built, painted, stamped. */
+:root {
+  --wheat: #F2B523;
+  --sky: #2C68A8;
+  --dirt: #A33B22;
+  --coal: #2A2C2F;
+  --prairie: #4A6839;
+  --ink: #1E1A16;
+  --paper: #FFFBF0;
+  --display: "Londrina Solid", "Arial Narrow", Impact, sans-serif;
+  --body: "Barlow Semi Condensed", "Arial Narrow", Arial, sans-serif;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--wheat);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+/* paper grain over everything */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---------- bands ---------- */
+/* Each band always sits on its own color, so its text keeps its contrast anywhere on screen.
+   The top edge blends in from the band above (--prev) inside the band's top padding, before any text. */
+.band {
+  background: linear-gradient(to bottom, var(--prev, var(--bg)), var(--bg) 4.5rem);
+  color: var(--fg);
+  position: relative;
+}
+#work { --prev: var(--wheat); }
+#trucks { --prev: var(--sky); }
+#side { --prev: var(--dirt); }
+#family { --prev: var(--coal); }
+#hi { --prev: var(--prairie); }
+.band--wheat { --bg: var(--wheat); --fg: var(--ink); --line: rgba(30, 26, 22, 0.35); }
+.band--sky { --bg: var(--sky); --fg: var(--paper); --line: rgba(255, 251, 240, 0.4); }
+.band--dirt { --bg: var(--dirt); --fg: var(--paper); --line: rgba(255, 251, 240, 0.4); }
+.band--coal { --bg: var(--coal); --fg: var(--paper); --line: rgba(255, 251, 240, 0.3); }
+.band--prairie { --bg: var(--prairie); --fg: var(--paper); --line: rgba(255, 251, 240, 0.4); }
+
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: clamp(4.5rem, 11vw, 8.5rem);
+}
+
+/* ---------- type ---------- */
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; }
+.big-head {
+  font-size: clamp(3.4rem, 11vw, 8rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+p { margin: 0; max-width: 34em; }
+.lede { font-size: clamp(1.3rem, 2.4vw, 1.65rem); line-height: 1.35; font-weight: 500; }
+.quiet { opacity: 0.82; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible {
+  outline: 3px dashed currentColor;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.num {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.6em;
+  line-height: 1;
+  display: inline-block;
+  transform: rotate(-3deg);
+  padding-inline: 0.06em;
+}
+
+/* ---------- headings: shared letter mechanics (letters split by script) ---------- */
+[data-build] { position: relative; }
+.word { display: inline-block; white-space: nowrap; }
+.ch {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.25s cubic-bezier(.3, 1.8, .5, 1), opacity 0.5s ease;
+}
+.ch:hover { transform: translateY(-0.08em) rotate(var(--w, 6deg)); }
+.build-layer { position: absolute; left: 0; pointer-events: none; overflow: visible; transition: opacity 0.5s ease; }
+
+/* painted: a brush sweeps each word (drawn by script); the finished letters keep streaky paint and rough edges */
+[data-build="paint"] { filter: url(#rough); }
+[data-build="paint"] .ch {
+  background-image: repeating-linear-gradient(176deg, var(--fg) 0 5px, color-mix(in srgb, var(--fg) 78%, var(--bg)) 5px 6px, var(--fg) 6px 12px);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* typed: one key at a time, a little typewriter wobble, cursor rides along */
+[data-build="type"] .ch { transform: translateY(var(--j)) rotate(var(--jr)); }
+[data-build="type"] .ch:hover { transform: translateY(-0.08em) rotate(var(--w, 6deg)); }
+.armed[data-build="type"] .ch { opacity: 0; }
+.play[data-build="type"] .ch { animation: key 40ms linear both; animation-delay: calc(var(--i) * 75ms); }
+.play[data-build="type"] .ch::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 0.14em;
+  bottom: 0.1em;
+  width: 0.08em;
+  background: currentColor;
+  /* Hidden at rest. The caret shows only while its own animation is active and has no
+     fill, so when the animation ends the caret always falls back to hidden. */
+  opacity: 0;
+  animation: caret 75ms linear;
+  animation-delay: calc(var(--i) * 75ms);
+}
+.play[data-build="type"] .ch.last::after { animation: blink 0.9s steps(1) infinite; animation-delay: calc(var(--i) * 75ms); }
+@keyframes key { from { opacity: 0; } to { opacity: 1; } }
+@keyframes caret { from, to { opacity: 1; } }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+
+/* built: each letter arrives in three pieces that snap together */
+.sizer { visibility: hidden; }
+.pc { position: absolute; inset: 0; }
+.p0 { clip-path: inset(-30% -30% 63% -30%); --fx: -0.5em; --fy: -0.9em; --fr: -28deg; --pi: 0; }
+.p1 { clip-path: inset(36% -30% 31% -30%); --fx: 0.8em; --fy: 0.1em; --fr: 18deg; --pi: 1; }
+.p2 { clip-path: inset(68% -30% -30% -30%); --fx: -0.25em; --fy: 0.9em; --fr: 24deg; --pi: 2; }
+.armed[data-build="build"] .pc { opacity: 0; }
+.play[data-build="build"] .pc { animation: bolt 0.45s cubic-bezier(.25, 1.55, .5, 1) both; animation-delay: calc(var(--i) * 95ms + var(--pi) * 80ms); }
+.play[data-build="build"] .ch:not(.settled) { animation: clunk 0.25s ease-out both; animation-delay: calc(var(--i) * 95ms + 420ms); }
+@keyframes bolt {
+  from { transform: translate(var(--fx), var(--fy)) rotate(var(--fr)); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes clunk {
+  0%, 100% { transform: none; }
+  40% { transform: translateY(0.04em) scaleY(0.93); }
+}
+
+/* painted, poured, and sketched are drawn by script on a layer over the heading */
+.armed[data-build="paint"] .ch,
+.armed[data-build="sand"] .ch,
+.armed[data-build="sketch"] .ch { opacity: 0; }
+
+/* stamped: each letter thumps down */
+.armed[data-build="stamp"] .ch { opacity: 0; }
+.play[data-build="stamp"] .ch:not(.settled) { animation: stomp 0.5s cubic-bezier(.2, 1.4, .4, 1) both; animation-delay: calc(var(--i) * 110ms); }
+@keyframes stomp {
+  from { transform: translateY(-0.5em) rotate(var(--r)) scale(1.6); opacity: 0; }
+  55% { opacity: 1; }
+  to { transform: none; opacity: 1; }
+}
+
+/* ---------- nav ---------- */
+.hero .wrap { padding-top: calc(env(safe-area-inset-top, 0px) + 1.5rem); }
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: clamp(3rem, 8vw, 6rem);
+}
+.top ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0; padding: 0; }
+.top a {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+}
+.top a:hover { text-decoration: underline wavy; text-underline-offset: 5px; }
+
+/* ---------- hero ---------- */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+.hero h1 { font-size: clamp(4.4rem, 15vw, 11rem); line-height: 0.84; text-transform: uppercase; }
+.hero-copy { display: grid; gap: 1.5rem; min-width: 0; }
+.where { font-size: 1.05rem; }
+
+.snap {
+  position: relative;
+  margin: 0;
+  justify-self: center;
+  width: min(100%, 340px);
+  background: var(--paper);
+  padding: 12px;
+  transform: rotate(3deg);
+  box-shadow: 0 14px 30px -18px rgba(30, 26, 22, 0.6);
+}
+.snap img { display: block; width: 100%; height: auto; aspect-ratio: 343 / 400; object-fit: cover; }
+.snap::before { /* tape */
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 96px;
+  height: 28px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: rgba(255, 251, 240, 0.7);
+  box-shadow: 0 1px 2px rgba(30, 26, 22, 0.15);
+}
+.note {
+  position: absolute;
+  left: -118px;
+  bottom: 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink);
+  transform: rotate(-6deg);
+}
+.note svg { width: 92px; height: 58px; margin-left: 30px; }
+.note path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- work ---------- */
+.stack { display: grid; gap: 1.75rem; }
+.jobs { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; }
+.job {
+  display: grid;
+  grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
+  gap: 0.25rem 2rem;
+  padding-block: 1.25rem;
+  border-top: 2px dashed var(--line);
+}
+.job:last-child { border-bottom: 2px dashed var(--line); }
+.job h3 { font-size: 2.1rem; line-height: 1; }
+.job .years { font-size: 1rem; opacity: 0.8; margin-top: 0.35rem; }
+.job p { align-self: center; }
+
+/* ---------- trucks ---------- */
+.trucks-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 2.5rem 3rem;
+  align-items: center;
+}
+.trucks-copy { display: grid; gap: 1.75rem; min-width: 0; }
+.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; }
+.log li { display: grid; grid-template-columns: 4.2rem minmax(0, 1fr); gap: 1rem; align-items: baseline; }
+.log .yr { font-family: var(--display); font-size: 1.9rem; line-height: 1; }
+
+.stamp {
+  justify-self: center;
+  width: min(100%, 320px);
+  border: 5px solid var(--paper);
+  outline: 2px solid var(--paper);
+  outline-offset: 5px;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-family: var(--display);
+  text-transform: uppercase;
+  color: var(--paper);
+  transform: rotate(-9deg);
+  opacity: 0.92;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -2.6 2.15'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -2.6 2.15'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+}
+.stamp .s1 { font-size: 1.2rem; letter-spacing: 0.12em; }
+.stamp .s2 { font-size: clamp(2.6rem, 6vw, 3.4rem); font-weight: 900; line-height: 0.95; margin-block: 0.3rem; }
+.stamp .s3 { font-size: 1.05rem; letter-spacing: 0.08em; }
+.stamp.play { animation: thud 0.45s cubic-bezier(.3, 1.4, .5, 1) both; }
+@keyframes thud {
+  from { transform: rotate(-2deg) scale(1.7); opacity: 0; }
+  60% { opacity: 0.95; }
+  to { transform: rotate(-9deg) scale(1); opacity: 0.92; }
+}
+
+/* ---------- side project ---------- */
+.side-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 2.5rem 3rem;
+  align-items: center;
+}
+.side-copy { display: grid; gap: 1.5rem; min-width: 0; }
+.go {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  color: var(--wheat);
+  text-decoration: underline wavy;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  justify-self: start;
+}
+.file {
+  justify-self: center;
+  width: min(100%, 330px);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 1.25rem 1.4rem 1.4rem;
+  transform: rotate(2deg);
+  box-shadow: 0 16px 30px -18px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+.file::before { /* folder tab */
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 18px;
+  width: 120px;
+  height: 20px;
+  background: var(--paper);
+  border-radius: 6px 6px 0 0;
+}
+.file h3 { font-size: 1.5rem; margin-bottom: 0.6rem; }
+.file ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; font-size: 1.1rem; }
+.file li { display: flex; align-items: center; gap: 0.6rem; }
+.file svg { width: 22px; height: 22px; flex: none; }
+.file path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.file .ok path { stroke: var(--prairie); }
+.file .due { color: var(--dirt); font-weight: 600; }
+.file .due path { stroke: var(--dirt); }
+.file.play path { stroke-dasharray: 40; animation: draw 0.4s ease-out both; animation-delay: calc(var(--i) * 0.18s + 0.2s); }
+@keyframes draw { from { stroke-dashoffset: 40; } to { stroke-dashoffset: 0; } }
+
+/* ---------- family ---------- */
+.family-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 2.5rem 4rem;
+  align-items: center;
+}
+.family-copy { display: grid; gap: 1.5rem; min-width: 0; }
+.snap--family { transform: rotate(-2.5deg); width: min(100%, 360px); }
+.snap--family img { aspect-ratio: 3 / 4; }
+
+/* ---------- say hi ---------- */
+.hi { display: grid; gap: 1.75rem; }
+.hi h2 { font-size: clamp(5rem, 20vw, 14rem); line-height: 0.82; text-transform: uppercase; }
+.links { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; align-items: baseline; }
+.links a { font-family: var(--display); font-size: clamp(1.8rem, 4vw, 2.4rem); text-decoration: underline wavy; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.email { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.email code { font-family: var(--body); font-size: 1.25rem; font-weight: 600; user-select: all; }
+.copy {
+  font: inherit;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  color: var(--ink);
+  background: transparent;
+  border: 2px solid var(--ink);
+  border-radius: 999px 900px 999px 860px / 860px 999px 900px 999px;
+  padding: 0.15rem 0.9rem;
+  cursor: pointer;
+}
+.copy:hover { background: var(--ink); color: var(--wheat); }
+footer { padding-top: 3rem; margin-top: 2rem; border-top: 2px dashed var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; font-size: 1rem; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 820px) {
+  .hero-grid, .trucks-grid, .side-grid, .family-grid { grid-template-columns: minmax(0, 1fr); }
+  .snap { width: min(78%, 280px); }
+  .note { display: none; }
+  .job { grid-template-columns: minmax(0, 1fr); }
+  .family-grid .snap { order: 2; }
+}
+@media (max-width: 1100px) and (min-width: 821px) {
+  .note { left: -96px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ch { transition: none; }
+  .stamp.play, .file.play path { animation: none; }
+}
+</style>
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top navbar-dark navbarScroll">
-        <div class="container">
-            <a class="navbar-brand" href="#">Ryan Barnes</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#services">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#portfolio">Portfolio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
-                    </li>
-                </ul>
 
-            </div>
-        </div>
+<svg class="defs" aria-hidden="true" focusable="false">
+  <filter id="rough" x="-5%" y="-10%" width="110%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="4" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
+  </filter>
+</svg>
+
+<main>
+<section class="band band--wheat hero" id="top">
+  <div class="wrap">
+    <nav class="top" aria-label="Sections">
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#trucks">Trucking</a></li>
+        <li><a href="#side">Side project</a></li>
+        <li><a href="#family">Family</a></li>
+        <li><a href="#hi">Say hi</a></li>
+      </ul>
     </nav>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1 data-build="sketch">Hey, I'm Ryan</h1>
+        <p class="lede">I write software for banks and credit unions. Before that, I spent 13 years keeping trucks on the road.</p>
+        <p class="where quiet">Software engineer at Digital Onboarding, based in Oklahoma City.</p>
+      </div>
+      <figure class="snap">
+        <img src="images/ryan-headshot.jpg" alt="Ryan Barnes smiling, outdoors in a park" width="711" height="864" fetchpriority="high" style="object-position: 50% 30%">
+        <span class="note" aria-hidden="true">that's me
+          <svg viewBox="0 0 92 58"><path d="M4 8 C 24 4, 58 14, 82 44"/><path d="M68 42 L83 46 L84 30"/></svg>
+        </span>
+      </figure>
+    </div>
+  </div>
+</section>
 
-    <section class="bgimage" id="home">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 head-text">
-                    <h2 class="head_title">Hi, my name is Ryan Barnes</h2>
-                    <p class="head_desc">I am a developer at <a class="pio" href="https://array.com/"
-                            target="_blank">Array.</a></p>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="band band--sky" id="work">
+  <div class="wrap stack">
+    <h2 class="big-head" data-build="type">These days, fintech</h2>
+    <p class="lede">Four years as an engineer, all of it in financial services. I mostly write Elixir and Phoenix LiveView, with React when it earns its spot.</p>
+    <ul class="jobs">
+      <li class="job">
+        <div><h3>Digital Onboarding</h3><div class="years">2025 to now</div></div>
+        <p>Building onboarding flows for banks and credit unions, and moving the old React screens over to LiveView.</p>
+      </li>
+      <li class="job">
+        <div><h3>Array</h3><div class="years">2024 to 2025</div></div>
+        <p>Built a debt guidance product for consumers, from the first commit through launch.</p>
+      </li>
+      <li class="job">
+        <div><h3>Payitoff</h3><div class="years">2022 to 2024</div></div>
+        <p>Student loan repayment automation. I owned the frontend flows, monthly infrastructure work, and SOC 2.</p>
+      </li>
+    </ul>
+    <p class="quiet">Elixir, Phoenix LiveView, React, Next.js, TypeScript, PostgreSQL, and AWS.</p>
+  </div>
+</section>
 
-    <section id="about">
-        <div class="container mt-4 pt-4">
-            <h1 class="text-center">About Me</h1>
-            <div class="row mt-4">
-                <div class="col-lg-4">
-                    <img src="images/IMG_5288.JPG" class="imageAboutPage" alt="">
-                </div>
+<section class="band band--dirt" id="trucks">
+  <div class="wrap trucks-grid">
+    <div class="trucks-copy">
+      <h2 class="big-head" data-build="sand">13 years of trucking</h2>
+      <p class="lede">Before I wrote code, I ran fleets in agriculture and oil and gas. At the biggest, that was <span class="num">700</span> drivers, <span class="num">4,000</span> pieces of equipment, and a <span class="num">$35M</span> yearly budget.</p>
+      <ol class="log">
+        <li><span class="yr">2019</span><p>Worked with Hitachi on its first AI fleet management software, built to catch breakdowns before they happen.</p></li>
+        <li><span class="yr">2021</span><p>Co-wrote Oklahoma House Bill 2325, so equipment dealers no longer need a pilot car to move implements down the road.</p></li>
+        <li><span class="yr">2022</span><p>Worked with Ford to drive adoption of its Ford Fleet Connect program.</p></li>
+      </ol>
+    </div>
+    <div class="stamp" data-pop aria-label="Stamp: House Bill 2325, pilot car not required, Oklahoma 2021">
+      <div class="s1">HB 2325</div>
+      <div class="s2">Pilot car not required</div>
+      <div class="s3">Oklahoma 2021</div>
+    </div>
+  </div>
+</section>
 
-                <div class="col-lg-8">
-                    <p> I am a software engineer with a focus toward responsive, accessible and efficient
-                        design. I am an analytical thinker who likes to know how and why things work the way that
-                        they do.</p>
-                    <p>Prior to becoming a developer, I spent the last 13 years as a Fleet Manager in agriculture and
-                        oil & gas. During this time, I managed as many as 700 drivers and 4,000 assets with an annual
-                        budget of $35MM. In 2019 I consulted with Hitachi on the development of the first AI Fleet
-                        Management software to maximize productivity and reduce unexpected downtime. In 2021 I
-                        co-authored Oklahoma House Bill 2325 to eliminate the need for pilot cars for retail implement
-                        dealers. </p>
-                    <p>These experiences gave me the skills in day-to-day business operations, budgeting, regulatory
-                        compliance, and data analysis but none of it would have been possible without teamwork,
-                        collaboration, and processes.</p>
-                    <p>The tech resources and community are such a blessing and I enjoy being
-                        a contributing part of the tech community. Thanks for checking out my page!</p>
+<section class="band band--coal" id="side">
+  <div class="wrap side-grid">
+    <div class="side-copy">
+      <h2 class="big-head" data-build="build">Core Compliance</h2>
+      <p class="lede">My side project, where the two careers meet.</p>
+      <p>Every trucking company has to keep a qualification file on each driver: CDL, medical card, driving record, road test, and more. Core Compliance keeps those files complete and flags anything about to expire, before an auditor finds it first.</p>
+      <a class="go" href="https://corecompliance.io" target="_blank" rel="noopener">Visit corecompliance.io</a>
+    </div>
+    <div class="file" data-pop aria-label="Example driver file checklist">
+      <h3>Driver file: J. Ortiz</h3>
+      <ul>
+        <li class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13 L10 19 L21 5" style="--i:0"/></svg>CDL</li>
+        <li class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13 L10 19 L21 5" style="--i:1"/></svg>Driving record (MVR)</li>
+        <li class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13 L10 19 L21 5" style="--i:2"/></svg>Road test</li>
+        <li class="due"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L12 14 M12 19 L12 20" style="--i:3"/></svg>Medical card: renew in 12 days</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
+<section class="band band--prairie" id="family">
+  <div class="wrap family-grid">
+    <figure class="snap snap--family">
+      <img src="images/family.jpg" alt="Ryan with his wife and son, cheek to cheek on a beach at sunset" width="768" height="1024" loading="lazy" decoding="async">
+    </figure>
+    <div class="family-copy">
+      <h2 class="big-head" data-build="paint">Off the clock</h2>
+      <p class="lede">Home is Oklahoma City. Most weekends belong to these two.</p>
+      <p>We enjoy traveling, basketball, and a good cup of coffee.</p>
+    </div>
+  </div>
+</section>
 
-                </div>
-            </div>
-    </section>
-
-    <section id="languages">
-        <div class="container">
-            <h1 class="text-center">Languages & Tools</h1>
-            <div class="text-center">
-                <img src="images/icons8-visual-studio-code-2019-150.png" alt="VS code" class="logo" />
-                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                <img src="images/icons8-javascript-96.png" alt="JS" class="logo" />
-                <img src="images/icons8-bootstrap-96.png" alt="bootstrap" class="logo" />
-                <img src="images/tailwindcss-icon.svg" alt="tailwind" class="logo" />
-                <img src="images/icons8-node-js-96.png" alt="nodejs" class="logo" />
-                <img src="images/icons8-github-96.png" alt="github" class="logo" />
-                <img src="images/icons8-amazon-web-services-96.png" alt="aws" class="logo" />
-            </div>
-        </div>
-    </section>
-
-    <section id="services">
-        <div class="container border-top">
-            <h1 class="text-center">Services</h1>
-            <div class="row">
-                <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <i class="servicesIcon fa-solid fa-code"></i>
-                            <h4 class="card-title mt-3">Website Development</h4>
-                            <p class="card-text mt-3">I love to write efficient, well documented, and scalable code.
-                                I try to stay up to date on the latest best practices and writing code
-                                that is easy to review and debug.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <i class="servicesIcon fa-brands fa-figma"></i>
-                            <h4 class="card-title mt-3">Website Design</h4>
-                            <p class="card-text mt-3">I appreciate a well thought out and ergonomic website design. I
-                                have a lot to learn on the design side but I like to use websites such as <a
-                                    class="deslink" href="https://dribbble.com/"> Dribbble</a> and
-                                <a class="deslink" href="https://www.codewell.cc/">Codewell</a> as my design
-                                inspiration.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <i class='far servicesIcon fa-check-circle'></i>
-                            <h4 class="card-title mt-3">DevOps</h4>
-                            <p class="card-text mt-3">My experience in business operations has allowed me to
-                                be an asset on the technology side as well as the business side. I enjoy joining
-                                people, process, and technology to continually provide value.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </section>
-
-    <section id="portfolio">
-        <div class="container mt-3 border-top">
-            <h1 class="text-center">Portfolio</h1>
-            <div class="row">
-                <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="images/tahoe.png" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Lake Tahoe</h4>
-                            <p class="card-text text-center">I love the western United States and especially the Rockies
-                                so I
-                                put
-                                together a page about visiting Lake Tahoe.</p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <a href="https://rbarnesokc.github.io/Lake-Tahoe/" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4">
-                    <div class="card portfolioContent h-100">
-                        <img class="card-img-top" src="images/registration.png" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Registration Form</h4>
-                            <p class="card-text text-center">This is a project to show technique in margin, padding, and
-                                responsiveness.</p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <a href="https://rbarnesokc.github.io/Responsive-Registration-Form/"
-                                    class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4">
-                    <div class="card portfolioContent h-100">
-                        <img class="card-img-top" src="images/candy.png" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Candy</h4>
-                            <p class="card-text text-center">In this project I wanted to demonstrate skills in
-                                Bootstrap, page
-                                organization, and responsiveness.</p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <img src="images/icons8-javascript-96.png" alt="JS" class="logo" />
-                                <img src="images/icons8-bootstrap-96.png" alt="bootstrap" class="logo" />
-                                <a href="https://rbarnesokc.github.io/Candy/" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <img class="card-img-top mb-3" src="images/Screenshot 2022-04-04 135041.jpg" alt="Card image"
-                            style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Insurance Agency</h4>
-                            <p class="card-text text-center">
-                                This is a general business site built on the Webflow platform.
-                            </p>
-                            <div class="text-center">
-                                <img src="images/icons8-webflow-96.png" alt="webflow" class="logo" />
-                                <a href="https://preview.webflow.com/preview/insurance-site-b30a06?utm_medium=preview_link&utm_source=designer&utm_content=insurance-site-b30a06&preview=f60da5d16e6557bc75ceb479a2d61c87&workflow=preview"
-                                    class="stretched-link"></a>
-                                <!-- <a href="#" class="btn btn-danger">Coming Soon!</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4">
-                    <div class="card portfolioContent h-100">
-                        <img class="card-img-top" src="images/PIO Now.jpg" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Hosted Partner Page</h4>
-                            <p class="card-text text-center">This is a hosted page built for clients who did not
-                                want to build their own customer experience.
-                            </p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <img src="images/tailwindcss-icon.svg" alt="tailwind" class="logo" />
-                                <img src="images/elixir-original.svg" alt="elixir" class="logo" />
-                                <a href="https://partners.payitoff.io/now/payitoff" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4">
-                    <div class="card portfolioContent h-100">
-                        <img class="card-img-top" src="images/PIO Portal.jpg" alt="Card image" style="width: 100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Portal</h4>
-                            <p class="card-text text-center">
-                                This was built so that partners could go in and use some of our products
-                                in a sandbox environment.
-                            </p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <img src="images/tailwindcss-icon.svg" alt="tailwind" class="logo" />
-                                <img src="images/elixir-original.svg" alt="elixir" class="logo" />
-                                <a href="https://payitoff-staging.io/portal/login" class="stretched-link"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="images/gately gallery.jpg" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Photographer Gallery</h4>
-                            <p class="card-text text-center">
-                            <h5>Coming Soon!</h5>
-                            </p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <img src="images/icons8-javascript-96.png" alt="JS" class="logo" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="images/regulatory.jpg" alt="Card image" style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Regulatory Document System</h4>
-                            <p class="card-text text-center">
-                            <h5>Coming Soon!</h5>
-                            </p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <img src="images/icons8-javascript-96.png" alt="JS" class="logo" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- 
-                <div class="col-lg-4 mt-4">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="images/marcin-jozwiak-kGoPcmpPT7c-unsplash.jpg" alt="Card image"
-                            style="width:100%">
-                        <div class="card-body">
-                            <h4 class="card-title">Fleet Management Software</h4>
-                            <p class="card-text text-center">
-                            <h5>Coming Soon!</h5>
-                            </p>
-                            <div class="text-center">
-                                <img src="images/icons8-html-5-96.png" alt="HTML" class="logo" />
-                                <img src="images/icons8-css3-96.png" alt="CSS" class="logo" />
-                                <img src="images/icons8-javascript-96.png" alt="JS" class="logo" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
-            <br>
-    </section>
-
-    <section id="contact">
-        <div class="container mt-3 border-top">
-            <h1 class="text-center">Lets connect!</h1>
-            <div class="social-icons text-center">
-                <a href="https://www.linkedin.com/in/ryan-barnes-okc/" target="_blank" class="linkedin"><img
-                        src="images/icons8-linkedin-96.png" class="logo" /></a>
-                <a href="https://github.com/rbarnesokc" target="_blank" class="github"><img
-                        src="images/icons8-github-96.png" class="logo" /></a>
-                <a href="mailto:ryanbarnes.okc@gmail.com" target="_blank" class="gmail"><img
-                        src="images/icons8-gmail-96.png" class="logo" /></a>
-            </div>
-        </div>
-    </section>
-
-    <footer id="footer">
-        <div class="text-center p-3">
-            Created by Ryan Barnes, 2022
-            <!-- <a class="foot" href="#top"><img src="images/icons8-up-arrow-64.png" class="foot" /></a> -->
-        </div>
+<section class="band band--wheat" id="hi">
+  <div class="wrap hi">
+    <h2 data-build="stamp">Say hi</h2>
+    <p class="lede">Hiring, running a fleet, or just want to talk LiveView? I'm easy to reach.</p>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/ryan-barnes-okc/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/rbarnesokc" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="email">
+      <code id="email-addr">ryanbarnes.okc@gmail.com</code>
+      <button class="copy" id="copy-email" type="button">Copy email</button>
+    </div>
+    <footer>
+      <span>Built by me in Oklahoma City. No pilot car required.</span>
+      <span>&copy; 2026</span>
     </footer>
+  </div>
+</section>
+</main>
 
-    <script src="script/script.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hasIO = "IntersectionObserver" in window;
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  // ---------- split each heading into words and letters ----------
+  function split(h) {
+    const text = h.textContent.replace(/\s+/g, " ").trim();
+    h.setAttribute("aria-label", text);
+    h.textContent = "";
+    let i = 0;
+    text.split(" ").forEach((w, wi) => {
+      if (wi > 0) { h.append(" "); i += 2; } // a beat between words
+      const word = document.createElement("span");
+      word.className = "word";
+      word.setAttribute("aria-hidden", "true");
+      word.style.setProperty("--wi", wi);
+      for (const c of w) {
+        const s = document.createElement("span");
+        s.className = "ch";
+        s.textContent = c;
+        s.dataset.c = c.toUpperCase(); // every heading is set in caps
+        s.style.setProperty("--i", i++);
+        s.style.setProperty("--r", rand(-15, 15).toFixed(1) + "deg");
+        s.style.setProperty("--w", rand(-9, 9).toFixed(1) + "deg");
+        s.style.setProperty("--j", rand(-0.025, 0.025).toFixed(3) + "em");
+        s.style.setProperty("--jr", rand(-1.8, 1.8).toFixed(1) + "deg");
+        s.addEventListener("animationend", (e) => { if (e.target === s) s.classList.add("settled"); });
+        word.append(s);
+      }
+      h.append(word);
+    });
+    const all = h.querySelectorAll(".ch");
+    all[all.length - 1].classList.add("last");
+  }
+
+  // Built headings: each letter becomes three slices stacked over an invisible sizer.
+  function piece(h) {
+    h.querySelectorAll(".ch").forEach((ch) => {
+      const c = ch.textContent;
+      ch.textContent = "";
+      const sizer = document.createElement("span");
+      sizer.className = "sizer";
+      sizer.textContent = c;
+      ch.append(sizer);
+      for (let p = 0; p < 3; p++) {
+        const pc = document.createElement("span");
+        pc.className = "pc p" + p;
+        pc.textContent = c;
+        ch.append(pc);
+      }
+    });
+  }
+
+  // ---------- letter geometry, for the layers drawn by script ----------
+  const measureCtx = document.createElement("canvas").getContext("2d");
+  function layout(h) {
+    const o = h.getBoundingClientRect();
+    const px = parseFloat(getComputedStyle(h).fontSize);
+    const font = `400 ${px}px "Londrina Solid"`;
+    measureCtx.font = font;
+    const m = measureCtx.measureText("H");
+    // Assumes the browser exposes font box metrics; falls back to typical cap proportions.
+    const asc = m.fontBoundingBoxAscent || px * 0.9;
+    const desc = m.fontBoundingBoxDescent || px * 0.25;
+    const cap = m.actualBoundingBoxAscent || px * 0.72;
+    const letters = [...h.querySelectorAll(".ch")].map((ch) => {
+      const r = ch.getBoundingClientRect();
+      return {
+        c: ch.dataset.c,
+        x: r.left - o.left,
+        y: r.top - o.top + (r.height - (asc + desc)) / 2 + asc,
+        w: r.width,
+        wi: Number(ch.closest(".word").style.getPropertyValue("--wi")),
+      };
+    });
+    return { w: o.width, h: o.height, px, font, cap, letters };
+  }
+
+  // Animation clock that only advances while frames are drawn, so a background tab
+  // pauses the animation instead of skipping to the end. `step(t)` returns true to continue.
+  function run(step) {
+    return new Promise((done) => {
+      let t = 0;
+      let last;
+      const frame = (now) => {
+        if (last !== undefined) t += Math.min(now - last, 50) / 1000;
+        last = now;
+        if (step(t)) requestAnimationFrame(frame); else done();
+      };
+      requestAnimationFrame(frame);
+    });
+  }
+
+  function layer(W, H) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const c = document.createElement("canvas");
+    c.width = Math.ceil(W * dpr);
+    c.height = Math.ceil(H * dpr);
+    const ctx = c.getContext("2d");
+    ctx.scale(dpr, dpr);
+    return [c, ctx];
+  }
+
+  // Painted: a bristle brush sweeps back and forth across each word, top to bottom,
+  // and paint only sticks inside the letters.
+  async function paintIn(h) {
+    await wait(350); // let the page settle into view before the first stroke
+    const L = layout(h);
+    const pad = Math.round(L.px * 0.3);
+    const W = Math.ceil(L.w) + pad * 2, H = Math.ceil(L.h) + pad * 2;
+    const ink = getComputedStyle(h).color;
+
+    const [mask, mctx] = layer(W, H);
+    mctx.font = L.font;
+    L.letters.forEach((l) => mctx.fillText(l.c, l.x + pad, l.y + pad));
+    const [paint, pctx] = layer(W, H);
+    pctx.strokeStyle = ink;
+    pctx.lineCap = "round";
+    const [cv, ctx] = layer(W, H);
+    cv.className = "build-layer";
+    cv.setAttribute("aria-hidden", "true");
+    Object.assign(cv.style, { width: W + "px", height: H + "px", left: -pad + "px", top: -pad + "px" });
+    h.append(cv);
+
+    const words = [];
+    L.letters.forEach((l) => {
+      const w = (words[l.wi] ||= { x0: Infinity, x1: -Infinity, base: l.y });
+      w.x0 = Math.min(w.x0, l.x);
+      w.x1 = Math.max(w.x1, l.x + l.w);
+    });
+    const ROWS = 4;
+    const strokes = words.filter(Boolean).map((w, k) => {
+      const top = w.base - L.cap - L.px * 0.06 + pad;
+      const bottom = w.base + L.px * 0.2 + pad; // reaches commas below the baseline
+      const band = (bottom - top) / ROWS;
+      const a = w.x0 + pad - L.px * 0.12, z = w.x1 + pad + L.px * 0.12;
+      const pts = [];
+      for (let r = 0; r < ROWS; r++) {
+        const y = top + band * (r + 0.5);
+        pts.push(r % 2 ? [z, y] : [a, y], r % 2 ? [a, y] : [z, y]);
+      }
+      const segs = [];
+      let total = 0;
+      for (let i = 1; i < pts.length; i++) {
+        const len = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+        segs.push({ from: pts[i - 1], to: pts[i], at: total, len });
+        total += len;
+      }
+      const width = band * 1.7;
+      const bristles = Array.from({ length: 11 }, (_, b) => ({
+        off: (b / 10 - 0.5) * width + rand(-1, 1),
+        alpha: rand(0.55, 1),
+        lw: (width / 11) * rand(1.1, 1.8),
+      }));
+      return { segs, total, width, bristles, start: k * 0.95, dur: 0.9, done: 0 };
+    });
+    const pointAt = (s, d) => {
+      const seg = s.segs.find((g) => d <= g.at + g.len) || s.segs[s.segs.length - 1];
+      const k = seg.len ? Math.min(1, (d - seg.at) / seg.len) : 1;
+      return [seg.from[0] + (seg.to[0] - seg.from[0]) * k, seg.from[1] + (seg.to[1] - seg.from[1]) * k];
+    };
+    const ease = (k) => 0.5 - 0.5 * Math.cos(Math.PI * k);
+    const end = Math.max(...strokes.map((s) => s.start + s.dur)) + 0.15;
+
+    await run((t) => {
+      let tip = null;
+      for (const s of strokes) {
+        const k = Math.max(0, Math.min(1, (t - s.start) / s.dur));
+        const d = ease(k) * s.total;
+        if (d <= s.done) continue;
+        // lay paint along the path in short steps so the bristles follow the zigzag
+        for (let x = s.done; x < d; x += 4) {
+          const p0 = pointAt(s, x), p1 = pointAt(s, Math.min(d, x + 4));
+          for (const b of s.bristles) {
+            pctx.globalAlpha = b.alpha;
+            pctx.lineWidth = b.lw;
+            pctx.beginPath();
+            pctx.moveTo(p0[0], p0[1] + b.off);
+            pctx.lineTo(p1[0], p1[1] + b.off);
+            pctx.stroke();
+          }
+        }
+        s.done = d;
+        if (k < 1) tip = { p: pointAt(s, d), width: s.width };
+      }
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = 1;
+      ctx.drawImage(paint, 0, 0, W, H);
+      ctx.globalCompositeOperation = "destination-in";
+      ctx.drawImage(mask, 0, 0, W, H);
+      ctx.globalCompositeOperation = "source-over";
+      if (tip) { // the brush itself, riding just ahead of the paint
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = ink;
+        ctx.beginPath();
+        ctx.ellipse(tip.p[0], tip.p[1], tip.width * 0.14, tip.width * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      return t < end;
+    });
+    h.classList.remove("armed");
+    cv.style.opacity = "0";
+    await wait(550);
+    cv.remove();
+  }
+
+  // Poured: grains of dirt fall into the letter shapes, left to right, bottom up.
+  async function pour(h) {
+    const L = layout(h);
+    const pad = Math.round(L.px * 1.8);
+    const W = Math.ceil(L.w), H = Math.ceil(L.h) + pad;
+    const off = document.createElement("canvas");
+    off.width = W; off.height = H;
+    const octx = off.getContext("2d");
+    octx.font = L.font;
+    octx.fillStyle = "#000";
+    L.letters.forEach((l) => octx.fillText(l.c, l.x, l.y + pad));
+    const data = octx.getImageData(0, 0, W, H).data;
+    const step = Math.max(2, Math.round(L.px / 45));
+    const grains = [];
+    for (let y = 0; y < H; y += step) {
+      for (let x = 0; x < W; x += step) {
+        if (data[(y * W + x) * 4 + 3] < 128) continue;
+        const delay = (x / W) * 1.1 + (1 - (y - pad) / L.h) * 0.45 + rand(0, 0.3);
+        const dur = rand(0.45, 0.6);
+        const tx = x + rand(-step * 0.4, step * 0.4);
+        grains.push({ tx, ty: y + rand(-step * 0.4, step * 0.4), sx: tx + rand(-5, 5), sy: y - rand(pad * 0.55, pad), delay, dur, tone: Math.random() < 0.25 });
+      }
+    }
+    const end = Math.max(...grains.map((g) => g.delay + g.dur));
+    const [cv, ctx] = layer(W, H);
+    cv.className = "build-layer";
+    cv.setAttribute("aria-hidden", "true");
+    Object.assign(cv.style, { width: W + "px", height: H + "px", top: -pad + "px" });
+    h.append(cv);
+    const fg = getComputedStyle(h).color;
+    const size = step * 0.95;
+    await run((t) => {
+        ctx.clearRect(0, 0, W, H);
+        for (const pass of [false, true]) {
+          ctx.fillStyle = fg;
+          ctx.globalAlpha = pass ? 0.7 : 1;
+          for (const g of grains) {
+            if (g.tone !== pass) continue;
+            const k = (t - g.delay) / g.dur;
+            if (k <= 0) continue;
+            if (k >= 1) { ctx.fillRect(g.tx, g.ty, size, size); continue; }
+            ctx.fillRect(g.sx + (g.tx - g.sx) * k, g.sy + (g.ty - g.sy) * k * k, size, size);
+          }
+        }
+        return t < end;
+    });
+    h.classList.remove("armed");
+    cv.style.opacity = "0";
+    await wait(550);
+    cv.remove();
+  }
+
+  // Sketched: pencil outlines draw in with a loose guide line, then hatching, then solid.
+  async function sketch(h) {
+    await wait(350); // let the page settle into view before the pencil starts
+    const L = layout(h);
+    const NS = "http://www.w3.org/2000/svg";
+    const fg = getComputedStyle(h).color;
+    const svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "build-layer");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("width", Math.ceil(L.w));
+    svg.setAttribute("height", Math.ceil(L.h));
+    svg.style.top = "0";
+    svg.innerHTML = `
+      <defs>
+        <filter id="pencil" x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="7" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3"/>
+        </filter>
+        <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+          <line x1="0" y1="0" x2="0" y2="7" stroke="${fg}" stroke-width="1.7"/>
+        </pattern>
+      </defs>`;
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("filter", "url(#pencil)");
+    g.style.font = L.font;
+    svg.append(g);
+    const len = Math.round(L.px * 9);
+    const anims = [];
+    L.letters.forEach((l, n) => {
+      const mk = (cls) => {
+        const t = document.createElementNS(NS, "text");
+        t.setAttribute("x", l.x);
+        t.setAttribute("y", l.y);
+        t.textContent = l.c;
+        g.append(t);
+        return t;
+      };
+      const guide = mk();
+      guide.setAttribute("fill", "none");
+      guide.setAttribute("stroke", fg);
+      guide.setAttribute("stroke-width", "1");
+      guide.setAttribute("stroke-opacity", "0.5");
+      guide.setAttribute("transform", "translate(2 -1.5)");
+      guide.setAttribute("stroke-dasharray", len);
+      const line = mk();
+      line.setAttribute("fill", "none");
+      line.setAttribute("stroke", fg);
+      line.setAttribute("stroke-width", "1.8");
+      line.setAttribute("stroke-dasharray", len);
+      const hatch = mk();
+      hatch.setAttribute("fill", "url(#hatch)");
+      hatch.setAttribute("opacity", "0");
+      // One letter at a time, the way a hand would: a quick light guide, the firm outline, then shading.
+      const d = n * 260;
+      anims.push(
+        guide.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 380, delay: d, fill: "both", easing: "ease-out" }).finished,
+        line.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 560, delay: d + 110, fill: "both", easing: "ease-in-out" }).finished,
+        hatch.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, delay: d + 560, fill: "both" }).finished,
+      );
+    });
+    h.append(svg);
+    await Promise.all(anims);
+    await wait(150);
+    h.classList.remove("armed");
+    svg.style.opacity = "0";
+    await wait(550);
+    svg.remove();
+  }
+
+  const drawn = { paint: paintIn, sand: pour, sketch };
+
+  function play(el) {
+    const kind = el.dataset.build;
+    if (kind && drawn[kind]) {
+      document.fonts.ready.then(() => drawn[kind](el)).catch(() => el.classList.remove("armed"));
+      return;
+    }
+    el.classList.remove("armed");
+    el.classList.add("play");
+  }
+
+  const heads = [...document.querySelectorAll("[data-build]")];
+  heads.forEach((h) => {
+    split(h);
+    if (h.dataset.build === "build") piece(h);
+  });
+
+  // Hide each heading's finished state only when we know we can play it in later.
+  if (!reduce && hasIO) {
+    heads.forEach((h) => h.classList.add("armed"));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        play(e.target);
+      });
+    }, { threshold: 0.35 });
+    heads.forEach((h) => io.observe(h));
+    document.querySelectorAll("[data-pop]").forEach((el) => io.observe(el));
+  }
+
+  // Copy email; fall back to selecting the text if the clipboard is refused.
+  const btn = document.getElementById("copy-email");
+  const addr = document.getElementById("email-addr");
+  btn.addEventListener("click", () => {
+    const done = () => { btn.textContent = "Copied"; setTimeout(() => (btn.textContent = "Copy email"), 1800); };
+    const fallback = () => {
+      const r = document.createRange();
+      r.selectNodeContents(addr);
+      const sel = getSelection();
+      sel.removeAllRanges();
+      sel.addRange(r);
+      btn.textContent = "Selected, press copy";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(addr.textContent).then(done, fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
 </body>
-
 </html>
